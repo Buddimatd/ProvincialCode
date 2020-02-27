@@ -1,7 +1,7 @@
 {
     "py/object": "pros.conductor.project.Project",
     "py/state": {
-        "project_name": "ProvincialCode",
+        "project_name": "ProvsBot",
         "target": "v5",
         "templates": {
             "kernel": {
