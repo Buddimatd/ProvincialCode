@@ -16,4 +16,5 @@ extern pros::ADIGyro gyro;
 extern pros::ADIUltrasonic sensor;
 extern pros::Task tUpdateActualGyro;
 extern pros::Imu imu_sensor;
+extern pros::ADIDigitalIn switch1;
 extern double gyroActual;

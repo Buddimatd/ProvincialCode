@@ -5,9 +5,9 @@
 
 
 void autonomous(){
-  // drive_pid(2000, 100);
-  // pros::delay(300);
-  // turn(-30);
-  // pros::delay(100);
-  rev_pid(300, 100);
+  drive_pid(2700, 75);
+  pros::delay(300);
+  turn(30);
+  drive_pid(500,50);
+
 }

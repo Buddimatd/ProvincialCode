@@ -19,4 +19,6 @@ pros::Motor tray(16, pros::E_MOTOR_GEARSET_36, true,
 pros::Motor arm(2, pros::E_MOTOR_GEARSET_36, false,
                 pros::E_MOTOR_ENCODER_COUNTS);
 pros::Imu imu_sensor(9);
+
+pros::ADIDigitalIn switch1 (1);
 //pros::ADIUltrasonic sensor(7, 8);

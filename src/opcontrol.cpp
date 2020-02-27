@@ -69,17 +69,17 @@ void opcontrol() {
 		driveleft_T.move(left);
 		driveleft_B.move(left);
 
-		if (master.get_digital(DIGITAL_R2)){
+		if (master.get_digital(DIGITAL_L2)){
 			intakeRight.move(200);
 			intakeLeft.move(200);
-		} else if (master.get_digital(DIGITAL_L2)){
+		} else if (master.get_digital(DIGITAL_R2)){
 			intakeRight.move(-200);
 			intakeLeft.move(-200);
 		}
-		else if (master.get_digital(DIGITAL_R1)){
+		else if (master.get_digital(DIGITAL_L1)){
 			intakeRight.move(50);
 			intakeLeft.move(50);
-		} else if (master.get_digital(DIGITAL_L1)){
+		} else if (master.get_digital(DIGITAL_R1)){
 			intakeRight.move(-50);
 			intakeLeft.move(-50);
 		} else if (((master.get_digital(DIGITAL_R1)) && (master.get_digital(DIGITAL_R1)) && (master.get_digital(DIGITAL_R1)) && (master.get_digital(DIGITAL_R1))) == false ) {
