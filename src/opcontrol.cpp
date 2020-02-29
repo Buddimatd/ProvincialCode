@@ -2,6 +2,7 @@
 //#include "functions.hpp"
 #include "okapi/api.hpp"
 #include "config.hpp"
+#include "macros.hpp"
 #include <sstream>
 #include <stdio.h>
 
@@ -87,6 +88,44 @@ void opcontrol() {
 			intakeLeft.move(0);
 		}
 
+		if (master.get_digital(DIGITAL_X) ){
+			op_arm_high();
+		} if (master.get_digital(DIGITAL_Y)){
+			op_arm_mid();
+		} if (master.get_digital(DIGITAL_B)){
+			op_arm_low();
+		} else{
+			tray.move(-traypower);
+
+			// arm adjust
+			if (master.get_digital(DIGITAL_UP)){
+				arm.move(-120);
+			}
+			else if (master.get_digital(DIGITAL_DOWN)){
+				arm.move(120);
+
+			} else if ((!(master.get_digital(DIGITAL_UP))) and (!(master.get_digital(DIGITAL_DOWN)))){
+				arm.move_velocity(0);
+			}
+
+			if (master.get_digital(DIGITAL_DOWN) && master.get_digital(DIGITAL_RIGHT)){
+				driveleft_T.move_velocity(0);
+				driveright_T.move_velocity(0);
+				driveleft_B.move_velocity(0);
+				driveright_B.move_velocity(0);
+
+				driveleft_T.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+				driveright_T.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+				driveleft_B.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+				driveright_B.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+			} else {
+				driveleft_T.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+		    driveright_T.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+		    driveleft_B.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+		    driveright_B.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+			}
+
+
 
 		pros::lcd::print(1, "Yaw: %.2f", imu_sensor.get_yaw());
 		pros::lcd::print(2, "Roll: %.2f", imu_sensor.get_roll());
@@ -100,7 +139,7 @@ void opcontrol() {
 				pros::lcd::print(4, "Target: Lost");
 		}
 
-	}}
+	}}}
 	// if (armpower){
 	// 	float traypower = armpower * 1.2;
 	// 	if (traypower > 127) traypower = 127;

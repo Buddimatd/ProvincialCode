@@ -1,5 +1,6 @@
 #include "config.hpp"
 #include "main.h"
+#include <stdio.h>
 
 void drive_pid(int dist, int usr_speed){
   if (dist > 0) {
@@ -9,14 +10,19 @@ void drive_pid(int dist, int usr_speed){
     driveright_T.tare_position();
 
     double kp = .3;
-    double kd = 0;
-    double ki = 0;
+    double kd = .4;
+    double ki = .0001;
+
+    int start_gyro = imu_sensor.get_yaw();
 
     int prevError = 0;
     int error = 0;
     int integral = 0;
     int derivative = 0;
     int driveTarget = dist;
+
+    int rightpower = 0;
+    int leftpower = 0;
     while(1){
       pros::delay(20);
 
@@ -33,7 +39,7 @@ void drive_pid(int dist, int usr_speed){
       derivative = error - prevError;
       prevError = error;
      int speed = error*kp + integral*ki + derivative*kd;
-
+     std::cout << "E:" <<error << "\n" << "S:" << speed<< "\n";
       pros::lcd::print(5, "Speed: %d ", speed );
 
       if(speed > usr_speed)
@@ -45,7 +51,11 @@ void drive_pid(int dist, int usr_speed){
       driveleft_B.move(speed);
       driveright_B.move(speed);
       driveright_T.move(speed);
-      if (speed < 25){
+      if (speed < 5){
+        driveleft_T.move(0);
+        driveleft_B.move(0);
+        driveright_B.move(0);
+        driveright_T.move(0);
         break;
       }
     }
@@ -57,9 +67,10 @@ void drive_pid(int dist, int usr_speed){
        driveright_B.tare_position();
        driveright_T.tare_position();
 
-       double kp = .2;
-       double kd = 0;
-       double ki = 0;
+       double kp = .3;
+       double kd = .4;
+       double ki = .0001;
+
 
        int prevError = 0;
        int error = 0;
@@ -84,7 +95,7 @@ void drive_pid(int dist, int usr_speed){
          prevError = error;
          int speed = error*kp + integral*ki + derivative*kd;
          pros::lcd::print(2, "Speed: %d ", speed );
-         //std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+         std::cout << "E:" <<error << "\n" << "S:" << speed<< "\n";
 
          if(speed > usr_speed)
            speed = usr_speed;
@@ -97,6 +108,10 @@ void drive_pid(int dist, int usr_speed){
           driveright_T.move(-speed);
 
           if (speed < 5){
+            driveleft_T.move(0);
+            driveleft_B.move(0);
+            driveright_B.move(0);
+            driveright_T.move(0);
             break;
           }
         }
@@ -161,8 +176,9 @@ void turn(int deg){
     driveleft_B.move_velocity(50);
     driveright_B.move_velocity(-50);
     int target = deg;
-    int margin = 5;
+    int margin = 3;
     while (imu_sensor.get_yaw() < target - margin){
+      std::cout << "Angle" << imu_sensor.get_yaw() << "\n";
       pros::delay(10);
     }
     driveleft_T.move_velocity(0);
@@ -184,8 +200,10 @@ void turn(int deg){
     driveleft_B.move_velocity(-50);
     driveright_B.move_velocity(50);
     int target = deg;
-    int margin = 5;
+    int margin = 3;
     while (imu_sensor.get_yaw() > target + margin){
+      std::cout << "Angle" << imu_sensor.get_yaw() << "\n";
+
       pros::delay(10);
     }
     driveleft_T.move_velocity(0);
@@ -198,5 +216,6 @@ void turn(int deg){
     driveleft_B.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     driveright_B.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   }
+  std::cout << "Angle" << imu_sensor.get_yaw() << "\n";
   imu_sensor.reset();
 }
